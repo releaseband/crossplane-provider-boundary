@@ -1,0 +1,39 @@
+apiVersion: storage.boundary.upbound.io/v1alpha1
+kind: Bucket
+metadata:
+  annotations:
+    meta.upbound.io/example-id: storage/v1alpha1/bucket
+  labels:
+    testing.upbound.io/example-name: aws_static_credentials_example
+  name: aws-static-credentials-example
+spec:
+  forProvider:
+    attributesJson: ${jsonencode({ "region" = "us-east-1" })}
+    bucketName: mybucket
+    description: My first storage bucket!
+    name: My aws storage bucket with static credentials
+    pluginName: aws
+    scopeId: ${boundary_scope.org.id}
+    secretsJsonSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    workerFilter: '"pki" in "/tags/type"'
+
+---
+
+apiVersion: boundary.boundary.upbound.io/v1alpha1
+kind: Scope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: storage/v1alpha1/bucket
+  labels:
+    testing.upbound.io/example-name: org
+  name: org
+spec:
+  forProvider:
+    autoCreateAdminRole: true
+    autoCreateDefaultRole: true
+    description: My first scope!
+    name: organization_one
+    scopeId: ${boundary_scope.global.id}

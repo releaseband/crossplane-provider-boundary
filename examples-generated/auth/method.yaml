@@ -1,0 +1,30 @@
+apiVersion: auth.boundary.upbound.io/v1alpha1
+kind: Method
+metadata:
+  annotations:
+    meta.upbound.io/example-id: auth/v1alpha1/method
+  labels:
+    testing.upbound.io/example-name: password
+  name: password
+spec:
+  forProvider:
+    scopeId: ${boundary_scope.org.id}
+    type: password
+
+---
+
+apiVersion: boundary.boundary.upbound.io/v1alpha1
+kind: Scope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: auth/v1alpha1/method
+  labels:
+    testing.upbound.io/example-name: org
+  name: org
+spec:
+  forProvider:
+    autoCreateAdminRole: true
+    autoCreateDefaultRole: true
+    description: My first scope!
+    name: organization_one
+    scopeId: global

@@ -14,15 +14,33 @@ package apis
 import (
 	"k8s.io/apimachinery/pkg/runtime"
 
-	v1alpha1 "github.com/upbound/upjet-provider-template/apis/null/v1alpha1"
-	v1alpha1apis "github.com/upbound/upjet-provider-template/apis/v1alpha1"
-	v1beta1 "github.com/upbound/upjet-provider-template/apis/v1beta1"
+	v1alpha1 "github.com/releaseband/crossplane-provider-boundary/apis/account/v1alpha1"
+	v1alpha1alias "github.com/releaseband/crossplane-provider-boundary/apis/alias/v1alpha1"
+	v1alpha1auth "github.com/releaseband/crossplane-provider-boundary/apis/auth/v1alpha1"
+	v1alpha1boundary "github.com/releaseband/crossplane-provider-boundary/apis/boundary/v1alpha1"
+	v1alpha1credential "github.com/releaseband/crossplane-provider-boundary/apis/credential/v1alpha1"
+	v1alpha1host "github.com/releaseband/crossplane-provider-boundary/apis/host/v1alpha1"
+	v1alpha1managed "github.com/releaseband/crossplane-provider-boundary/apis/managed/v1alpha1"
+	v1alpha1policy "github.com/releaseband/crossplane-provider-boundary/apis/policy/v1alpha1"
+	v1alpha1scope "github.com/releaseband/crossplane-provider-boundary/apis/scope/v1alpha1"
+	v1alpha1storage "github.com/releaseband/crossplane-provider-boundary/apis/storage/v1alpha1"
+	v1alpha1apis "github.com/releaseband/crossplane-provider-boundary/apis/v1alpha1"
+	v1beta1 "github.com/releaseband/crossplane-provider-boundary/apis/v1beta1"
 )
 
 func init() {
 	// Register the types with the Scheme so the components can map objects to GroupVersionKinds and back
 	AddToSchemes = append(AddToSchemes,
 		v1alpha1.SchemeBuilder.AddToScheme,
+		v1alpha1alias.SchemeBuilder.AddToScheme,
+		v1alpha1auth.SchemeBuilder.AddToScheme,
+		v1alpha1boundary.SchemeBuilder.AddToScheme,
+		v1alpha1credential.SchemeBuilder.AddToScheme,
+		v1alpha1host.SchemeBuilder.AddToScheme,
+		v1alpha1managed.SchemeBuilder.AddToScheme,
+		v1alpha1policy.SchemeBuilder.AddToScheme,
+		v1alpha1scope.SchemeBuilder.AddToScheme,
+		v1alpha1storage.SchemeBuilder.AddToScheme,
 		v1alpha1apis.SchemeBuilder.AddToScheme,
 		v1beta1.SchemeBuilder.AddToScheme,
 	)
