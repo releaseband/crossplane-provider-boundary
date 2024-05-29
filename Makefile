@@ -11,7 +11,7 @@ export TERRAFORM_PROVIDER_REPO ?= https://github.com/hashicorp/terraform-provide
 export TERRAFORM_PROVIDER_VERSION ?= 1.1.15
 export TERRAFORM_PROVIDER_DOWNLOAD_NAME ?= terraform-provider-boundary
 export TERRAFORM_PROVIDER_DOWNLOAD_URL_PREFIX ?= https://releases.hashicorp.com/$(TERRAFORM_PROVIDER_DOWNLOAD_NAME)/$(TERRAFORM_PROVIDER_VERSION)
-export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-null_v1.1.15_x5
+export TERRAFORM_NATIVE_PROVIDER_BINARY ?= terraform-provider-boundary_v1.1.15_x5
 export TERRAFORM_DOCS_PATH ?= docs/resources
 
 
