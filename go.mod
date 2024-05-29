@@ -1,4 +1,4 @@
-module github.com/upbound/provider-boundary
+module github.com/releaseband/crossplane-provider-boundary
 
 go 1.19
 
