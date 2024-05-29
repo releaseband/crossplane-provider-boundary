@@ -4,18 +4,18 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
-  name: resources.null.boundary.upbound.io
+  name: statics.host.boundary.upbound.io
 spec:
-  group: null.boundary.upbound.io
+  group: host.boundary.upbound.io
   names:
     categories:
     - crossplane
     - managed
     - boundary
-    kind: Resource
-    listKind: ResourceList
-    plural: resources
-    singular: resource
+    kind: Static
+    listKind: StaticList
+    plural: statics
+    singular: static
   scope: Cluster
   versions:
   - additionalPrinterColumns:
@@ -34,10 +34,10 @@ spec:
     name: v1alpha1
     schema:
       openAPIV3Schema:
-        description: Resource is the Schema for the Resources API. The null_resource
-          resource implements the standard resource lifecycle but takes no further
-          action. The triggers argument allows specifying an arbitrary set of values
-          that, when changed, will cause the resource to be replaced.
+        description: Static is the Schema for the Statics API. The static host resource
+          allows you to configure a Boundary static host. Hosts are always part of
+          a project, so a project resource should be used inline or you should have
+          the project ID in hand to successfully configure a host.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -52,7 +52,7 @@ spec:
           metadata:
             type: object
           spec:
-            description: ResourceSpec defines the desired state of Resource
+            description: StaticSpec defines the desired state of Static
             properties:
               deletionPolicy:
                 default: Delete
@@ -69,13 +69,27 @@ spec:
                 type: string
               forProvider:
                 properties:
-                  triggers:
-                    additionalProperties:
-                      type: string
-                    description: A map of arbitrary strings that, when changed, will
-                      force the null resource to be replaced, re-running any associated
-                      provisioners.
-                    type: object
+                  address:
+                    description: '(String) The static address of the host resource
+                      as <IP> (note: port assignment occurs in the target resource
+                      definition, do not add :port here) or a domain name. The static
+                      address of the host resource as `<IP>` (note: port assignment
+                      occurs in the target resource definition, do not add :port here)
+                      or a domain name.'
+                    type: string
+                  description:
+                    description: (String) The host description. The host description.
+                    type: string
+                  hostCatalogId:
+                    description: (String)
+                    type: string
+                  name:
+                    description: (String) The host name. Defaults to the resource
+                      name. The host name. Defaults to the resource name.
+                    type: string
+                  type:
+                    description: (String) The type of host The type of host
+                    type: string
                 type: object
               initProvider:
                 description: THIS IS A BETA FIELD. It will be honored unless the Management
@@ -89,13 +103,27 @@ spec:
                   for example because of an external controller is managing them,
                   like an autoscaler.
                 properties:
-                  triggers:
-                    additionalProperties:
-                      type: string
-                    description: A map of arbitrary strings that, when changed, will
-                      force the null resource to be replaced, re-running any associated
-                      provisioners.
-                    type: object
+                  address:
+                    description: '(String) The static address of the host resource
+                      as <IP> (note: port assignment occurs in the target resource
+                      definition, do not add :port here) or a domain name. The static
+                      address of the host resource as `<IP>` (note: port assignment
+                      occurs in the target resource definition, do not add :port here)
+                      or a domain name.'
+                    type: string
+                  description:
+                    description: (String) The host description. The host description.
+                    type: string
+                  hostCatalogId:
+                    description: (String)
+                    type: string
+                  name:
+                    description: (String) The host name. Defaults to the resource
+                      name. The host name. Defaults to the resource name.
+                    type: string
+                  type:
+                    description: (String) The type of host The type of host
+                    type: string
                 type: object
               managementPolicies:
                 default:
@@ -257,20 +285,40 @@ spec:
             required:
             - forProvider
             type: object
+            x-kubernetes-validations:
+            - message: spec.forProvider.hostCatalogId is a required parameter
+              rule: '!(''*'' in self.managementPolicies || ''Create'' in self.managementPolicies
+                || ''Update'' in self.managementPolicies) || has(self.forProvider.hostCatalogId)
+                || (has(self.initProvider) && has(self.initProvider.hostCatalogId))'
           status:
-            description: ResourceStatus defines the observed state of Resource.
+            description: StaticStatus defines the observed state of Static.
             properties:
               atProvider:
                 properties:
-                  id:
+                  address:
+                    description: '(String) The static address of the host resource
+                      as <IP> (note: port assignment occurs in the target resource
+                      definition, do not add :port here) or a domain name. The static
+                      address of the host resource as `<IP>` (note: port assignment
+                      occurs in the target resource definition, do not add :port here)
+                      or a domain name.'
                     type: string
-                  triggers:
-                    additionalProperties:
-                      type: string
-                    description: A map of arbitrary strings that, when changed, will
-                      force the null resource to be replaced, re-running any associated
-                      provisioners.
-                    type: object
+                  description:
+                    description: (String) The host description. The host description.
+                    type: string
+                  hostCatalogId:
+                    description: (String)
+                    type: string
+                  id:
+                    description: (String) The ID of the host.
+                    type: string
+                  name:
+                    description: (String) The host name. Defaults to the resource
+                      name. The host name. Defaults to the resource name.
+                    type: string
+                  type:
+                    description: (String) The type of host The type of host
+                    type: string
                 type: object
               conditions:
                 description: Conditions of the resource.
