@@ -1,0 +1,13 @@
+apiVersion: boundary.boundary.upbound.io/v1alpha1
+kind: Worker
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/worker
+  labels:
+    testing.upbound.io/example-name: controller_led
+  name: controller-led
+spec:
+  forProvider:
+    description: self managed worker with controller led auth
+    name: worker 1
+    scopeId: global
