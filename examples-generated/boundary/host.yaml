@@ -1,0 +1,67 @@
+apiVersion: boundary.boundary.upbound.io/v1alpha1
+kind: Host
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/host
+  labels:
+    testing.upbound.io/example-name: example
+  name: example
+spec:
+  forProvider:
+    address: 10.0.0.1
+    description: My first host!
+    hostCatalogId: ${boundary_host_catalog.static.id}
+    name: example_host
+    type: static
+
+---
+
+apiVersion: host.boundary.upbound.io/v1alpha1
+kind: Catalog
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/host
+  labels:
+    testing.upbound.io/example-name: static
+  name: static
+spec:
+  forProvider:
+    description: My first host catalog!
+    name: My catalog
+    scopeId: ${boundary_scope.project.id}
+    type: static
+
+---
+
+apiVersion: boundary.boundary.upbound.io/v1alpha1
+kind: Scope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/host
+  labels:
+    testing.upbound.io/example-name: org
+  name: org
+spec:
+  forProvider:
+    autoCreateAdminRole: true
+    autoCreateDefaultRole: true
+    description: My first scope!
+    name: organization_one
+    scopeId: global
+
+---
+
+apiVersion: boundary.boundary.upbound.io/v1alpha1
+kind: Scope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/host
+  labels:
+    testing.upbound.io/example-name: project
+  name: project
+spec:
+  forProvider:
+    autoCreateAdminRole: true
+    description: My first scope!
+    name: project_one
+    scopeId: ${boundary_scope.org.id}

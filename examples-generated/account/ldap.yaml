@@ -1,0 +1,74 @@
+apiVersion: account.boundary.upbound.io/v1alpha1
+kind: Ldap
+metadata:
+  annotations:
+    meta.upbound.io/example-id: account/v1alpha1/ldap
+  labels:
+    testing.upbound.io/example-name: einstein
+  name: einstein
+spec:
+  forProvider:
+    authMethodId: ${boundary_auth_method_ldap.forumsys_ldap.id}
+    loginName: einstein
+    name: einstein
+
+---
+
+apiVersion: auth.boundary.upbound.io/v1alpha1
+kind: MethodLdap
+metadata:
+  annotations:
+    meta.upbound.io/example-id: account/v1alpha1/ldap
+  labels:
+    testing.upbound.io/example-name: forumsys_ldap
+  name: forumsys-ldap
+spec:
+  forProvider:
+    bindDn: cn=read-only-admin,dc=example,dc=com
+    bindPassword: password
+    discoverDn: true
+    enableGroups: true
+    groupDn: dc=example,dc=com
+    name: forumsys public LDAP
+    scopeId: global
+    state: active-public
+    urls:
+    - ldap://ldap.forumsys.com
+    userAttr: uid
+    userDn: dc=example,dc=com
+
+---
+
+apiVersion: boundary.boundary.upbound.io/v1alpha1
+kind: Scope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: account/v1alpha1/ldap
+  labels:
+    testing.upbound.io/example-name: org
+  name: org
+spec:
+  forProvider:
+    autoCreateAdminRole: true
+    autoCreateDefaultRole: true
+    description: My first scope!
+    name: organization_one
+    scopeId: global
+
+---
+
+apiVersion: boundary.boundary.upbound.io/v1alpha1
+kind: User
+metadata:
+  annotations:
+    meta.upbound.io/example-id: account/v1alpha1/ldap
+  labels:
+    testing.upbound.io/example-name: einstein
+  name: einstein
+spec:
+  forProvider:
+    accountIds:
+    - ${boundary_account_ldap.einstein.id}
+    description: User resource for einstein
+    name: einstein
+    scopeId: global
