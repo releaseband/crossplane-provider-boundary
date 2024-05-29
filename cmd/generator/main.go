@@ -11,7 +11,7 @@ import (
 
 	"github.com/crossplane/upjet/pkg/pipeline"
 
-	"github.com/upbound/provider-boundary/config"
+	"github.com/releaseband/crossplane-provider-boundary/config"
 )
 
 func main() {

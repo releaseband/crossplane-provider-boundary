@@ -26,12 +26,12 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/cache"
 	"sigs.k8s.io/controller-runtime/pkg/log/zap"
 
-	"github.com/upbound/provider-boundary/apis"
-	"github.com/upbound/provider-boundary/apis/v1alpha1"
-	"github.com/upbound/provider-boundary/config"
-	"github.com/upbound/provider-boundary/internal/clients"
-	"github.com/upbound/provider-boundary/internal/controller"
-	"github.com/upbound/provider-boundary/internal/features"
+	"github.com/releaseband/crossplane-provider-boundary/apis"
+	"github.com/releaseband/crossplane-provider-boundary/apis/v1alpha1"
+	"github.com/releaseband/crossplane-provider-boundary/config"
+	"github.com/releaseband/crossplane-provider-boundary/internal/clients"
+	"github.com/releaseband/crossplane-provider-boundary/internal/controller"
+	"github.com/releaseband/crossplane-provider-boundary/internal/features"
 )
 
 func main() {
