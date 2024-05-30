@@ -8,10 +8,10 @@ boundary API.
 ## Getting Started
 
 Install the provider by using the following command after changing the image tag
-to the [latest release](https://marketplace.upbound.io/providers/upbound/provider-boundary):
+to the [latest release](https://marketplace.upbound.io/providers/releaseband/provider-boundary):
 
 ```
-up ctp provider install upbound/provider-boundary:v0.1.0
+up ctp provider install releaseband/provider-boundary:v0.1.0
 ```
 
 Alternatively, you can use declarative installation:
@@ -23,13 +23,13 @@ kind: Provider
 metadata:
   name: provider-boundary
 spec:
-  package: upbound/provider-boundary:v0.1.0
+  package: releaseband/provider-boundary:v0.1.0
 EOF
 ```
 
 Notice that in this example Provider resource is referencing ControllerConfig with debug enabled.
 
-You can see the API reference [here](https://doc.crds.dev/github.com/upbound/provider-boundary).
+You can see the API reference [here](https://doc.crds.dev/github.com/releaseband/crossplane-provider-boundary).
 
 ## Developing
 
