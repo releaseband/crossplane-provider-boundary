@@ -1,8 +1,8 @@
 # ====================================================================================
 # Setup Project
 
-PROJECT_NAME ?= crossplane-provider-boundary
-PROJECT_REPO ?= github.com/releaseband/$(PROJECT_NAME)
+PROJECT_NAME ?= provider-boundary
+PROJECT_REPO ?= github.com/releaseband/crossplane-$(PROJECT_NAME)
 
 export TERRAFORM_VERSION ?= 1.8.4
 
@@ -66,11 +66,12 @@ IMAGES = $(PROJECT_NAME)
 # ====================================================================================
 # Setup XPKG
 
-XPKG_REG_ORGS ?= xpkg.upbound.io/upbound
+XPKG_REG_ORGS ?= xpkg.upbound.io/releaseband
 # NOTE(hasheddan): skip promoting on xpkg.upbound.io as channel tags are
 # inferred.
-XPKG_REG_ORGS_NO_PROMOTE ?= xpkg.upbound.io/upbound
+XPKG_REG_ORGS_NO_PROMOTE ?= xpkg.upbound.io/releaseband
 XPKGS = $(PROJECT_NAME)
+# XPKGS = "provider-boundary"
 -include build/makelib/xpkg.mk
 
 # ====================================================================================
