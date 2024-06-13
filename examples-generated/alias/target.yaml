@@ -29,7 +29,9 @@ spec:
   forProvider:
     description: test catalog
     name: test
-    scopeId: ${boundary_scope.project.id}
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: project
 
 ---
 
@@ -43,10 +45,12 @@ metadata:
   name: foo
 spec:
   forProvider:
-    hostCatalogId: ${boundary_host_catalog_static.foo.id}
-    hostIds:
-    - ${boundary_host_static.foo.id}
-    - ${boundary_host_static.bar.id}
+    hostCatalogIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: foo
+    hostIdsRefs:
+    - name: foo
+    - name: bar
     name: foo
 
 ---
@@ -62,7 +66,9 @@ metadata:
 spec:
   forProvider:
     address: 127.0.0.1
-    hostCatalogId: ${boundary_host_catalog_static.foo.id}
+    hostCatalogIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: foo
     name: bar
 
 ---
@@ -78,7 +84,9 @@ metadata:
 spec:
   forProvider:
     address: 10.0.0.1
-    hostCatalogId: ${boundary_host_catalog_static.foo.id}
+    hostCatalogIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: foo
     name: foo
 
 ---
@@ -133,5 +141,7 @@ spec:
     hostSourceIds:
     - ${boundary_host_set_static.foo.id}
     name: foo
-    scopeId: ${boundary_scope.project.id}
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: project
     type: tcp

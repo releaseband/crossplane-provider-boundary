@@ -8,10 +8,12 @@ metadata:
   name: web
 spec:
   forProvider:
-    hostCatalogId: ${boundary_host_catalog_static.example.id}
-    hostIds:
-    - ${boundary_host_static.first.id}
-    - ${boundary_host_static.second.id}
+    hostCatalogIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
+    hostIdsRefs:
+    - name: first
+    - name: second
 
 ---
 
@@ -25,7 +27,9 @@ metadata:
   name: example
 spec:
   forProvider:
-    scopeId: ${boundary_scope.project.id}
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: project
 
 ---
 
@@ -41,7 +45,9 @@ spec:
   forProvider:
     address: 10.0.0.1
     description: My first host!
-    hostCatalogId: ${boundary_host_catalog_static.example.id}
+    hostCatalogIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
     name: host_1
 
 ---
@@ -58,7 +64,9 @@ spec:
   forProvider:
     address: 10.0.0.2
     description: My second host!
-    hostCatalogId: ${boundary_host_catalog_static.example.id}
+    hostCatalogIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
     name: host_2
 
 ---

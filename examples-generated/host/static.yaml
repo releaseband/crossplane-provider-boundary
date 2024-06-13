@@ -10,7 +10,9 @@ spec:
   forProvider:
     address: 10.0.0.1
     description: My first host!
-    hostCatalogId: ${boundary_host_catalog_static.example.id}
+    hostCatalogIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
     name: example_host
 
 ---
@@ -27,7 +29,9 @@ spec:
   forProvider:
     description: My first host catalog!
     name: My catalog
-    scopeId: ${boundary_scope.project.id}
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: project
 
 ---
 

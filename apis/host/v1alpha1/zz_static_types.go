@@ -27,9 +27,6 @@ type StaticInitParameters struct {
 	// The host description.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// (String)
-	HostCatalogID *string `json:"hostCatalogId,omitempty" tf:"host_catalog_id,omitempty"`
-
 	// (String) The host name. Defaults to the resource name.
 	// The host name. Defaults to the resource name.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
@@ -77,8 +74,18 @@ type StaticParameters struct {
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
 	// (String)
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/host/v1alpha1.CatalogStatic
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
 	// +kubebuilder:validation:Optional
 	HostCatalogID *string `json:"hostCatalogId,omitempty" tf:"host_catalog_id,omitempty"`
+
+	// Reference to a CatalogStatic in host to populate hostCatalogId.
+	// +kubebuilder:validation:Optional
+	HostCatalogIDRef *v1.Reference `json:"hostCatalogIdRef,omitempty" tf:"-"`
+
+	// Selector for a CatalogStatic in host to populate hostCatalogId.
+	// +kubebuilder:validation:Optional
+	HostCatalogIDSelector *v1.Selector `json:"hostCatalogIdSelector,omitempty" tf:"-"`
 
 	// (String) The host name. Defaults to the resource name.
 	// The host name. Defaults to the resource name.
@@ -126,9 +133,8 @@ type StaticStatus struct {
 type Static struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.hostCatalogId) || (has(self.initProvider) && has(self.initProvider.hostCatalogId))",message="spec.forProvider.hostCatalogId is a required parameter"
-	Spec   StaticSpec   `json:"spec"`
-	Status StaticStatus `json:"status,omitempty"`
+	Spec              StaticSpec   `json:"spec"`
+	Status            StaticStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
