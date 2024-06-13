@@ -10,9 +10,9 @@ on:
 
 env:
   # Common versions
-  GO_VERSION: '1.19'
-  GOLANGCI_VERSION: 'v1.50.0'
-  DOCKER_BUILDX_VERSION: 'v0.8.2'
+  GO_VERSION: "1.19"
+  GOLANGCI_VERSION: "v1.50.0"
+  DOCKER_BUILDX_VERSION: "v0.8.2"
 
   # Common users. We can't run a step 'if secrets.XXX != ""' but we can run a
   # step 'if env.XXX != ""', so we copy these to succinctly test whether
@@ -202,6 +202,11 @@ jobs:
     if: needs.detect-noop.outputs.noop != 'true'
 
     steps:
+      - uses: docker-practice/actions-setup-docker@master
+        timeout-minutes: 12
+        with:
+          docker_version: "24.0"
+
       - name: Checkout
         uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 #v3
         with:
@@ -251,6 +256,10 @@ jobs:
     if: needs.detect-noop.outputs.noop != 'true'
 
     steps:
+      - uses: docker-practice/actions-setup-docker@master
+        timeout-minutes: 12
+        with:
+          docker_version: "24.0"
       - name: Setup QEMU
         uses: docker/setup-qemu-action@2b82ce82d56a2a04d2637cd93a637ae1b359c0a7 # v2
         with:
