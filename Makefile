@@ -255,5 +255,5 @@ help-special: crossplane.help
 .PHONY: crossplane.help help-special
 
 # TODO(negz): Update CI to use these targets.
-vendor: modules.download
-vendor.check: modules.check
+# vendor: modules.download
+# vendor.check: modules.check
