@@ -1318,11 +1318,6 @@ func (in *TargetInitParameters) DeepCopyInto(out *TargetInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
-	if in.ScopeID != nil {
-		in, out := &in.ScopeID, &out.ScopeID
-		*out = new(string)
-		**out = **in
-	}
 	if in.SessionConnectionLimit != nil {
 		in, out := &in.SessionConnectionLimit, &out.SessionConnectionLimit
 		*out = new(float64)
@@ -1595,6 +1590,16 @@ func (in *TargetParameters) DeepCopyInto(out *TargetParameters) {
 		in, out := &in.ScopeID, &out.ScopeID
 		*out = new(string)
 		**out = **in
+	}
+	if in.ScopeIDRef != nil {
+		in, out := &in.ScopeIDRef, &out.ScopeIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ScopeIDSelector != nil {
+		in, out := &in.ScopeIDSelector, &out.ScopeIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.SessionConnectionLimit != nil {
 		in, out := &in.SessionConnectionLimit, &out.SessionConnectionLimit

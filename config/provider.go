@@ -9,7 +9,9 @@ import (
 	_ "embed"
 
 	ujconfig "github.com/crossplane/upjet/pkg/config"
-	// "github.com/releaseband/crossplane-provider-boundary/config/boundary"
+
+	boundary "github.com/releaseband/crossplane-provider-boundary/config/boundary"
+	host "github.com/releaseband/crossplane-provider-boundary/config/host"
 )
 
 const (
@@ -36,6 +38,8 @@ func GetProvider() *ujconfig.Provider {
 	for _, configure := range []func(provider *ujconfig.Provider){
 		// add custom config functions
 		// repository.Configure,
+		boundary.Configure,
+		host.Configure,
 	} {
 		configure(pc)
 	}

@@ -63,10 +63,6 @@ type TargetInitParameters struct {
 	// The target name. Defaults to the resource name.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
 
-	// (String) The scope ID in which the resource is created. Defaults to the provider's default_scope if unset.
-	// The scope ID in which the resource is created. Defaults to the provider's `default_scope` if unset.
-	ScopeID *string `json:"scopeId,omitempty" tf:"scope_id,omitempty"`
-
 	// (Number)
 	SessionConnectionLimit *float64 `json:"sessionConnectionLimit,omitempty" tf:"session_connection_limit,omitempty"`
 
@@ -217,8 +213,18 @@ type TargetParameters struct {
 
 	// (String) The scope ID in which the resource is created. Defaults to the provider's default_scope if unset.
 	// The scope ID in which the resource is created. Defaults to the provider's `default_scope` if unset.
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/boundary/v1alpha1.Scope
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
 	// +kubebuilder:validation:Optional
 	ScopeID *string `json:"scopeId,omitempty" tf:"scope_id,omitempty"`
+
+	// Reference to a Scope in boundary to populate scopeId.
+	// +kubebuilder:validation:Optional
+	ScopeIDRef *v1.Reference `json:"scopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a Scope in boundary to populate scopeId.
+	// +kubebuilder:validation:Optional
+	ScopeIDSelector *v1.Selector `json:"scopeIdSelector,omitempty" tf:"-"`
 
 	// (Number)
 	// +kubebuilder:validation:Optional
@@ -279,7 +285,6 @@ type TargetStatus struct {
 type Target struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.scopeId) || (has(self.initProvider) && has(self.initProvider.scopeId))",message="spec.forProvider.scopeId is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.type) || (has(self.initProvider) && has(self.initProvider.type))",message="spec.forProvider.type is a required parameter"
 	Spec   TargetSpec   `json:"spec"`
 	Status TargetStatus `json:"status,omitempty"`

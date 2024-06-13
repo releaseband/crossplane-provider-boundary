@@ -23,14 +23,6 @@ type SetStaticInitParameters struct {
 	// The host set description.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
-	// (String) The catalog for the host set.
-	// The catalog for the host set.
-	HostCatalogID *string `json:"hostCatalogId,omitempty" tf:"host_catalog_id,omitempty"`
-
-	// (Set of String) The list of host IDs contained in this set.
-	// The list of host IDs contained in this set.
-	HostIds []*string `json:"hostIds,omitempty" tf:"host_ids,omitempty"`
-
 	// (String) The host set name. Defaults to the resource name.
 	// The host set name. Defaults to the resource name.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
@@ -75,13 +67,33 @@ type SetStaticParameters struct {
 
 	// (String) The catalog for the host set.
 	// The catalog for the host set.
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/host/v1alpha1.CatalogStatic
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
 	// +kubebuilder:validation:Optional
 	HostCatalogID *string `json:"hostCatalogId,omitempty" tf:"host_catalog_id,omitempty"`
 
+	// Reference to a CatalogStatic in host to populate hostCatalogId.
+	// +kubebuilder:validation:Optional
+	HostCatalogIDRef *v1.Reference `json:"hostCatalogIdRef,omitempty" tf:"-"`
+
+	// Selector for a CatalogStatic in host to populate hostCatalogId.
+	// +kubebuilder:validation:Optional
+	HostCatalogIDSelector *v1.Selector `json:"hostCatalogIdSelector,omitempty" tf:"-"`
+
 	// (Set of String) The list of host IDs contained in this set.
 	// The list of host IDs contained in this set.
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/host/v1alpha1.Static
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
 	// +kubebuilder:validation:Optional
 	HostIds []*string `json:"hostIds,omitempty" tf:"host_ids,omitempty"`
+
+	// References to Static in host to populate hostIds.
+	// +kubebuilder:validation:Optional
+	HostIdsRefs []v1.Reference `json:"hostIdsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Static in host to populate hostIds.
+	// +kubebuilder:validation:Optional
+	HostIdsSelector *v1.Selector `json:"hostIdsSelector,omitempty" tf:"-"`
 
 	// (String) The host set name. Defaults to the resource name.
 	// The host set name. Defaults to the resource name.
@@ -129,9 +141,8 @@ type SetStaticStatus struct {
 type SetStatic struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.hostCatalogId) || (has(self.initProvider) && has(self.initProvider.hostCatalogId))",message="spec.forProvider.hostCatalogId is a required parameter"
-	Spec   SetStaticSpec   `json:"spec"`
-	Status SetStaticStatus `json:"status,omitempty"`
+	Spec              SetStaticSpec   `json:"spec"`
+	Status            SetStaticStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
