@@ -23,5 +23,10 @@ func Configure(p *config.Provider) {
 			TerraformName: "boundary_scope",
 			Extractor:     `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)`,
 		}
+		r.References["principal_ids"] = config.Reference{
+			TerraformName: "boundary_managed_group",
+			Extractor:     `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)`,
+		}
 	})
+
 }
