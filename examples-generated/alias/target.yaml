@@ -138,8 +138,8 @@ spec:
   forProvider:
     defaultPort: "22"
     description: Foo target
-    hostSourceIds:
-    - ${boundary_host_set_static.foo.id}
+    hostSourceIdsRefs:
+    - name: foo
     name: foo
     scopeIdSelector:
       matchLabels:

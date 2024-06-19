@@ -1292,17 +1292,6 @@ func (in *TargetInitParameters) DeepCopyInto(out *TargetInitParameters) {
 		*out = new(bool)
 		**out = **in
 	}
-	if in.HostSourceIds != nil {
-		in, out := &in.HostSourceIds, &out.HostSourceIds
-		*out = make([]*string, len(*in))
-		for i := range *in {
-			if (*in)[i] != nil {
-				in, out := &(*in)[i], &(*out)[i]
-				*out = new(string)
-				**out = **in
-			}
-		}
-	}
 	if in.IngressWorkerFilter != nil {
 		in, out := &in.IngressWorkerFilter, &out.IngressWorkerFilter
 		*out = new(string)
@@ -1570,6 +1559,18 @@ func (in *TargetParameters) DeepCopyInto(out *TargetParameters) {
 				**out = **in
 			}
 		}
+	}
+	if in.HostSourceIdsRefs != nil {
+		in, out := &in.HostSourceIdsRefs, &out.HostSourceIdsRefs
+		*out = make([]v1.Reference, len(*in))
+		for i := range *in {
+			(*in)[i].DeepCopyInto(&(*out)[i])
+		}
+	}
+	if in.HostSourceIdsSelector != nil {
+		in, out := &in.HostSourceIdsSelector, &out.HostSourceIdsSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.IngressWorkerFilter != nil {
 		in, out := &in.IngressWorkerFilter, &out.IngressWorkerFilter

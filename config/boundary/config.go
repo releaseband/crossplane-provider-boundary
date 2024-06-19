@@ -13,8 +13,8 @@ func Configure(p *config.Provider) {
 			TerraformName: "boundary_scope",
 			Extractor:     `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)`,
 		}
-		r.References["boundary_host_set_static"] = config.Reference{
-			TerraformName: "boundary_host_static",
+		r.References["host_source_ids"] = config.Reference{
+			TerraformName: "boundary_host_set_static",
 			Extractor:     `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)`,
 		}
 	})
