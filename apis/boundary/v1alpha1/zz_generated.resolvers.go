@@ -10,6 +10,7 @@ import (
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
 	resource "github.com/crossplane/upjet/pkg/resource"
 	errors "github.com/pkg/errors"
+	v1alpha11 "github.com/releaseband/crossplane-provider-boundary/apis/host/v1alpha1"
 	v1alpha1 "github.com/releaseband/crossplane-provider-boundary/apis/managed/v1alpha1"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
@@ -62,7 +63,24 @@ func (mg *Target) ResolveReferences(ctx context.Context, c client.Reader) error 
 	r := reference.NewAPIResolver(c, mg)
 
 	var rsp reference.ResolutionResponse
+	var mrsp reference.MultiResolutionResponse
 	var err error
+
+	mrsp, err = r.ResolveMultiple(ctx, reference.MultiResolutionRequest{
+		CurrentValues: reference.FromPtrValues(mg.Spec.ForProvider.HostSourceIds),
+		Extract:       resource.ExtractParamPath("id", true),
+		References:    mg.Spec.ForProvider.HostSourceIdsRefs,
+		Selector:      mg.Spec.ForProvider.HostSourceIdsSelector,
+		To: reference.To{
+			List:    &v1alpha11.SetStaticList{},
+			Managed: &v1alpha11.SetStatic{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.HostSourceIds")
+	}
+	mg.Spec.ForProvider.HostSourceIds = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.ForProvider.HostSourceIdsRefs = mrsp.ResolvedReferences
 
 	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
 		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ScopeID),

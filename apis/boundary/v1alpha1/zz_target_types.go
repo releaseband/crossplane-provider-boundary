@@ -47,10 +47,6 @@ type TargetInitParameters struct {
 	// HCP/Ent Only. Enable sessions recording for this target. Only applicable for SSH targets.
 	EnableSessionRecording *bool `json:"enableSessionRecording,omitempty" tf:"enable_session_recording,omitempty"`
 
-	// (Set of String) A list of host source ID's. Cannot be used alongside address.
-	// A list of host source ID's. Cannot be used alongside address.
-	HostSourceIds []*string `json:"hostSourceIds,omitempty" tf:"host_source_ids,omitempty"`
-
 	// (String) HCP Only. Boolean expression to filter the workers a user will connect to when initiating a session against this target
 	// HCP Only. Boolean expression to filter the workers a user will connect to when initiating a session against this target
 	IngressWorkerFilter *string `json:"ingressWorkerFilter,omitempty" tf:"ingress_worker_filter,omitempty"`
@@ -193,8 +189,18 @@ type TargetParameters struct {
 
 	// (Set of String) A list of host source ID's. Cannot be used alongside address.
 	// A list of host source ID's. Cannot be used alongside address.
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/host/v1alpha1.SetStatic
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
 	// +kubebuilder:validation:Optional
 	HostSourceIds []*string `json:"hostSourceIds,omitempty" tf:"host_source_ids,omitempty"`
+
+	// References to SetStatic in host to populate hostSourceIds.
+	// +kubebuilder:validation:Optional
+	HostSourceIdsRefs []v1.Reference `json:"hostSourceIdsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of SetStatic in host to populate hostSourceIds.
+	// +kubebuilder:validation:Optional
+	HostSourceIdsSelector *v1.Selector `json:"hostSourceIdsSelector,omitempty" tf:"-"`
 
 	// (String) HCP Only. Boolean expression to filter the workers a user will connect to when initiating a session against this target
 	// HCP Only. Boolean expression to filter the workers a user will connect to when initiating a session against this target

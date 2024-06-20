@@ -12,8 +12,8 @@ spec:
     - ${boundary_credential_library_vault.foo.id}
     defaultPort: "22"
     description: Foo target
-    hostSourceIds:
-    - ${boundary_host_set.foo.id}
+    hostSourceIdsRefs:
+    - name: foo
     name: foo
     scopeIdSelector:
       matchLabels:
