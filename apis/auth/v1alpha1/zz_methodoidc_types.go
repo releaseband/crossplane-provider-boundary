@@ -79,10 +79,6 @@ type MethodOidcInitParameters struct {
 	// The prompts passed to the identity provider to determine whether to prompt the end-user for reauthentication, account selection or consent. Please note the values passed are case-sensitive. The valid values are: `none`, `login`, `consent` and `select_account`.
 	Prompts []*string `json:"prompts,omitempty" tf:"prompts,omitempty"`
 
-	// (String) The scope ID.
-	// The scope ID.
-	ScopeID *string `json:"scopeId,omitempty" tf:"scope_id,omitempty"`
-
 	// (List of String) Allowed signing algorithms for the provider's issued tokens.
 	// Allowed signing algorithms for the provider's issued tokens.
 	SigningAlgorithms []*string `json:"signingAlgorithms,omitempty" tf:"signing_algorithms,omitempty"`
@@ -262,8 +258,18 @@ type MethodOidcParameters struct {
 
 	// (String) The scope ID.
 	// The scope ID.
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/boundary/v1alpha1.Scope
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
 	// +kubebuilder:validation:Optional
 	ScopeID *string `json:"scopeId,omitempty" tf:"scope_id,omitempty"`
+
+	// Reference to a Scope in boundary to populate scopeId.
+	// +kubebuilder:validation:Optional
+	ScopeIDRef *v1.Reference `json:"scopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a Scope in boundary to populate scopeId.
+	// +kubebuilder:validation:Optional
+	ScopeIDSelector *v1.Selector `json:"scopeIdSelector,omitempty" tf:"-"`
 
 	// (List of String) Allowed signing algorithms for the provider's issued tokens.
 	// Allowed signing algorithms for the provider's issued tokens.
@@ -316,9 +322,8 @@ type MethodOidcStatus struct {
 type MethodOidc struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.scopeId) || (has(self.initProvider) && has(self.initProvider.scopeId))",message="spec.forProvider.scopeId is a required parameter"
-	Spec   MethodOidcSpec   `json:"spec"`
-	Status MethodOidcStatus `json:"status,omitempty"`
+	Spec              MethodOidcSpec   `json:"spec"`
+	Status            MethodOidcStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

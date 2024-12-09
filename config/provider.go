@@ -10,8 +10,10 @@ import (
 
 	ujconfig "github.com/crossplane/upjet/pkg/config"
 
+	authconfig "github.com/releaseband/crossplane-provider-boundary/config/auth"
 	boundary "github.com/releaseband/crossplane-provider-boundary/config/boundary"
 	host "github.com/releaseband/crossplane-provider-boundary/config/host"
+	managed "github.com/releaseband/crossplane-provider-boundary/config/managed"
 )
 
 const (
@@ -40,6 +42,8 @@ func GetProvider() *ujconfig.Provider {
 		// repository.Configure,
 		boundary.Configure,
 		host.Configure,
+		authconfig.Configure,
+		managed.Configure,
 	} {
 		configure(pc)
 	}

@@ -19,9 +19,6 @@ import (
 
 type GroupInitParameters struct {
 
-	// The resource ID for the auth method.
-	AuthMethodID *string `json:"authMethodId,omitempty" tf:"auth_method_id,omitempty"`
-
 	// The managed group description.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
 
@@ -52,8 +49,18 @@ type GroupObservation struct {
 type GroupParameters struct {
 
 	// The resource ID for the auth method.
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/auth/v1alpha1.MethodOidc
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
 	// +kubebuilder:validation:Optional
 	AuthMethodID *string `json:"authMethodId,omitempty" tf:"auth_method_id,omitempty"`
+
+	// Reference to a MethodOidc in auth to populate authMethodId.
+	// +kubebuilder:validation:Optional
+	AuthMethodIDRef *v1.Reference `json:"authMethodIdRef,omitempty" tf:"-"`
+
+	// Selector for a MethodOidc in auth to populate authMethodId.
+	// +kubebuilder:validation:Optional
+	AuthMethodIDSelector *v1.Selector `json:"authMethodIdSelector,omitempty" tf:"-"`
 
 	// The managed group description.
 	// +kubebuilder:validation:Optional
@@ -103,7 +110,6 @@ type GroupStatus struct {
 type Group struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.authMethodId) || (has(self.initProvider) && has(self.initProvider.authMethodId))",message="spec.forProvider.authMethodId is a required parameter"
 	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.filter) || (has(self.initProvider) && has(self.initProvider.filter))",message="spec.forProvider.filter is a required parameter"
 	Spec   GroupSpec   `json:"spec"`
 	Status GroupStatus `json:"status,omitempty"`

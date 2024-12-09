@@ -16,7 +16,9 @@ spec:
       namespace: upbound-system
     description: My Boundary OIDC Auth Method for Vault
     issuer: https://XO-XO-XO-XO-XOXOXO.vault.hashicorp.cloud:8200/v1/identity/oidc/provider/my-provider
-    scopeId: global
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
     signingAlgorithms:
     - RS256
     type: oidc
