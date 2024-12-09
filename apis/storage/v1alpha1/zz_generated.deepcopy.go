@@ -83,6 +83,11 @@ func (in *BucketInitParameters) DeepCopyInto(out *BucketInitParameters) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.SecretsJSONSecretRef != nil {
+		in, out := &in.SecretsJSONSecretRef, &out.SecretsJSONSecretRef
+		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
 	if in.WorkerFilter != nil {
 		in, out := &in.WorkerFilter, &out.WorkerFilter
 		*out = new(string)

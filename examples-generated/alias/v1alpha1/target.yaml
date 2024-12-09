@@ -29,7 +29,9 @@ spec:
   forProvider:
     description: test catalog
     name: test
-    scopeId: ${boundary_scope.project.id}
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: project
 
 ---
 

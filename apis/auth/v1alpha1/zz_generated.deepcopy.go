@@ -898,6 +898,11 @@ func (in *MethodOidcInitParameters) DeepCopyInto(out *MethodOidcInitParameters) 
 		*out = new(string)
 		**out = **in
 	}
+	if in.ClientSecretSecretRef != nil {
+		in, out := &in.ClientSecretSecretRef, &out.ClientSecretSecretRef
+		*out = new(v1.SecretKeySelector)
+		**out = **in
+	}
 	if in.Description != nil {
 		in, out := &in.Description, &out.Description
 		*out = new(string)
@@ -949,6 +954,21 @@ func (in *MethodOidcInitParameters) DeepCopyInto(out *MethodOidcInitParameters) 
 				**out = **in
 			}
 		}
+	}
+	if in.ScopeID != nil {
+		in, out := &in.ScopeID, &out.ScopeID
+		*out = new(string)
+		**out = **in
+	}
+	if in.ScopeIDRef != nil {
+		in, out := &in.ScopeIDRef, &out.ScopeIDRef
+		*out = new(v1.Reference)
+		(*in).DeepCopyInto(*out)
+	}
+	if in.ScopeIDSelector != nil {
+		in, out := &in.ScopeIDSelector, &out.ScopeIDSelector
+		*out = new(v1.Selector)
+		(*in).DeepCopyInto(*out)
 	}
 	if in.SigningAlgorithms != nil {
 		in, out := &in.SigningAlgorithms, &out.SigningAlgorithms

@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2023 The Crossplane Authors <https://crossplane.io>
-//
-// SPDX-License-Identifier: Apache-2.0
-
 // SPDX-FileCopyrightText: 2024 The Crossplane Authors <https://crossplane.io>
 //
 // SPDX-License-Identifier: Apache-2.0
@@ -21,6 +17,7 @@ type UserInitParameters struct {
 
 	// (Set of String) Account ID's to associate with this user resource.
 	// Account ID's to associate with this user resource.
+	// +listType=set
 	AccountIds []*string `json:"accountIds,omitempty" tf:"account_ids,omitempty"`
 
 	// (String) The user description.
@@ -40,6 +37,7 @@ type UserObservation struct {
 
 	// (Set of String) Account ID's to associate with this user resource.
 	// Account ID's to associate with this user resource.
+	// +listType=set
 	AccountIds []*string `json:"accountIds,omitempty" tf:"account_ids,omitempty"`
 
 	// (String) The user description.
@@ -63,6 +61,7 @@ type UserParameters struct {
 	// (Set of String) Account ID's to associate with this user resource.
 	// Account ID's to associate with this user resource.
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	AccountIds []*string `json:"accountIds,omitempty" tf:"account_ids,omitempty"`
 
 	// (String) The user description.
@@ -105,13 +104,14 @@ type UserStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:storageversion
 
 // User is the Schema for the Users API. The user resource allows you to configure a Boundary user.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,boundary}
 type User struct {
 	metav1.TypeMeta   `json:",inline"`

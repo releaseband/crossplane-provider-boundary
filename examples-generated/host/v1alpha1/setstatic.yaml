@@ -27,7 +27,9 @@ metadata:
   name: example
 spec:
   forProvider:
-    scopeId: ${boundary_scope.project.id}
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: project
 
 ---
 

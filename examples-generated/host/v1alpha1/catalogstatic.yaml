@@ -10,7 +10,9 @@ spec:
   forProvider:
     description: My first host catalog!
     name: My catalog
-    scopeId: ${boundary_scope.project.id}
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: project
 
 ---
 

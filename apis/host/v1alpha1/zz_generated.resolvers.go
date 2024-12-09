@@ -11,8 +11,51 @@ import (
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
 	resource "github.com/crossplane/upjet/pkg/resource"
 	errors "github.com/pkg/errors"
+	v1alpha1 "github.com/releaseband/crossplane-provider-boundary/apis/main/v1alpha1"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
+
+// ResolveReferences of this CatalogStatic.
+func (mg *CatalogStatic) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPIResolver(c, mg)
+
+	var rsp reference.ResolutionResponse
+	var err error
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ScopeID),
+		Extract:      resource.ExtractParamPath("id", true),
+		Reference:    mg.Spec.ForProvider.ScopeIDRef,
+		Selector:     mg.Spec.ForProvider.ScopeIDSelector,
+		To: reference.To{
+			List:    &v1alpha1.ScopeList{},
+			Managed: &v1alpha1.Scope{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.ScopeID")
+	}
+	mg.Spec.ForProvider.ScopeID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.ScopeIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ScopeID),
+		Extract:      resource.ExtractParamPath("id", true),
+		Reference:    mg.Spec.InitProvider.ScopeIDRef,
+		Selector:     mg.Spec.InitProvider.ScopeIDSelector,
+		To: reference.To{
+			List:    &v1alpha1.ScopeList{},
+			Managed: &v1alpha1.Scope{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.ScopeID")
+	}
+	mg.Spec.InitProvider.ScopeID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.ScopeIDRef = rsp.ResolvedReference
+
+	return nil
+}
 
 // ResolveReferences of this SetStatic.
 func (mg *SetStatic) ResolveReferences(ctx context.Context, c client.Reader) error {
@@ -54,6 +97,38 @@ func (mg *SetStatic) ResolveReferences(ctx context.Context, c client.Reader) err
 	mg.Spec.ForProvider.HostIds = reference.ToPtrValues(mrsp.ResolvedValues)
 	mg.Spec.ForProvider.HostIdsRefs = mrsp.ResolvedReferences
 
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.HostCatalogID),
+		Extract:      resource.ExtractParamPath("id", true),
+		Reference:    mg.Spec.InitProvider.HostCatalogIDRef,
+		Selector:     mg.Spec.InitProvider.HostCatalogIDSelector,
+		To: reference.To{
+			List:    &CatalogStaticList{},
+			Managed: &CatalogStatic{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.HostCatalogID")
+	}
+	mg.Spec.InitProvider.HostCatalogID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.HostCatalogIDRef = rsp.ResolvedReference
+
+	mrsp, err = r.ResolveMultiple(ctx, reference.MultiResolutionRequest{
+		CurrentValues: reference.FromPtrValues(mg.Spec.InitProvider.HostIds),
+		Extract:       resource.ExtractParamPath("id", true),
+		References:    mg.Spec.InitProvider.HostIdsRefs,
+		Selector:      mg.Spec.InitProvider.HostIdsSelector,
+		To: reference.To{
+			List:    &StaticList{},
+			Managed: &Static{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.HostIds")
+	}
+	mg.Spec.InitProvider.HostIds = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.InitProvider.HostIdsRefs = mrsp.ResolvedReferences
+
 	return nil
 }
 
@@ -79,6 +154,22 @@ func (mg *Static) ResolveReferences(ctx context.Context, c client.Reader) error 
 	}
 	mg.Spec.ForProvider.HostCatalogID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.HostCatalogIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.HostCatalogID),
+		Extract:      resource.ExtractParamPath("id", true),
+		Reference:    mg.Spec.InitProvider.HostCatalogIDRef,
+		Selector:     mg.Spec.InitProvider.HostCatalogIDSelector,
+		To: reference.To{
+			List:    &CatalogStaticList{},
+			Managed: &CatalogStatic{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.HostCatalogID")
+	}
+	mg.Spec.InitProvider.HostCatalogID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.HostCatalogIDRef = rsp.ResolvedReference
 
 	return nil
 }

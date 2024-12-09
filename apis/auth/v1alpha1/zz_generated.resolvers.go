@@ -38,5 +38,21 @@ func (mg *MethodOidc) ResolveReferences(ctx context.Context, c client.Reader) er
 	mg.Spec.ForProvider.ScopeID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.ScopeIDRef = rsp.ResolvedReference
 
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ScopeID),
+		Extract:      resource.ExtractParamPath("id", true),
+		Reference:    mg.Spec.InitProvider.ScopeIDRef,
+		Selector:     mg.Spec.InitProvider.ScopeIDSelector,
+		To: reference.To{
+			List:    &v1alpha1.ScopeList{},
+			Managed: &v1alpha1.Scope{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.ScopeID")
+	}
+	mg.Spec.InitProvider.ScopeID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.ScopeIDRef = rsp.ResolvedReference
+
 	return nil
 }

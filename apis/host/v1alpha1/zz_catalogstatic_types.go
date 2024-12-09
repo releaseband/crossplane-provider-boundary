@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2023 The Crossplane Authors <https://crossplane.io>
-//
-// SPDX-License-Identifier: Apache-2.0
-
 // SPDX-FileCopyrightText: 2024 The Crossplane Authors <https://crossplane.io>
 //
 // SPDX-License-Identifier: Apache-2.0
@@ -29,7 +25,17 @@ type CatalogStaticInitParameters struct {
 
 	// (String) The scope ID in which the resource is created.
 	// The scope ID in which the resource is created.
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/main/v1alpha1.Scope
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
 	ScopeID *string `json:"scopeId,omitempty" tf:"scope_id,omitempty"`
+
+	// Reference to a Scope in main to populate scopeId.
+	// +kubebuilder:validation:Optional
+	ScopeIDRef *v1.Reference `json:"scopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a Scope in main to populate scopeId.
+	// +kubebuilder:validation:Optional
+	ScopeIDSelector *v1.Selector `json:"scopeIdSelector,omitempty" tf:"-"`
 }
 
 type CatalogStaticObservation struct {
@@ -64,8 +70,18 @@ type CatalogStaticParameters struct {
 
 	// (String) The scope ID in which the resource is created.
 	// The scope ID in which the resource is created.
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/main/v1alpha1.Scope
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
 	// +kubebuilder:validation:Optional
 	ScopeID *string `json:"scopeId,omitempty" tf:"scope_id,omitempty"`
+
+	// Reference to a Scope in main to populate scopeId.
+	// +kubebuilder:validation:Optional
+	ScopeIDRef *v1.Reference `json:"scopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a Scope in main to populate scopeId.
+	// +kubebuilder:validation:Optional
+	ScopeIDSelector *v1.Selector `json:"scopeIdSelector,omitempty" tf:"-"`
 }
 
 // CatalogStaticSpec defines the desired state of CatalogStatic
@@ -92,20 +108,20 @@ type CatalogStaticStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:storageversion
 
 // CatalogStatic is the Schema for the CatalogStatics API. The static host catalog resource allows you to configure a Boundary static-type host catalog. Host catalogs are always part of a project, so a project resource should be used inline or you should have the project ID in hand to successfully configure a host catalog.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,boundary}
 type CatalogStatic struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.scopeId) || (has(self.initProvider) && has(self.initProvider.scopeId))",message="spec.forProvider.scopeId is a required parameter"
-	Spec   CatalogStaticSpec   `json:"spec"`
-	Status CatalogStaticStatus `json:"status,omitempty"`
+	Spec              CatalogStaticSpec   `json:"spec"`
+	Status            CatalogStaticStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

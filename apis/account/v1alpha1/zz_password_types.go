@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2023 The Crossplane Authors <https://crossplane.io>
-//
-// SPDX-License-Identifier: Apache-2.0
-
 // SPDX-FileCopyrightText: 2024 The Crossplane Authors <https://crossplane.io>
 //
 // SPDX-License-Identifier: Apache-2.0
@@ -34,6 +30,10 @@ type PasswordInitParameters struct {
 	// (String) The account name. Defaults to the resource name.
 	// The account name. Defaults to the resource name.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	// (String, Sensitive) The account password. Only set on create, changes will not be reflected when updating account.
+	// The account password. Only set on create, changes will not be reflected when updating account.
+	PasswordSecretRef *v1.SecretKeySelector `json:"passwordSecretRef,omitempty" tf:"-"`
 
 	// (String, Deprecated) The resource type.
 	// The resource type.
@@ -123,13 +123,14 @@ type PasswordStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:storageversion
 
 // Password is the Schema for the Passwords API. The account resource allows you to configure a Boundary account.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,boundary}
 type Password struct {
 	metav1.TypeMeta   `json:",inline"`

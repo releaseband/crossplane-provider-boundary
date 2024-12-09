@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2023 The Crossplane Authors <https://crossplane.io>
-//
-// SPDX-License-Identifier: Apache-2.0
-
 // SPDX-FileCopyrightText: 2024 The Crossplane Authors <https://crossplane.io>
 //
 // SPDX-License-Identifier: Apache-2.0
@@ -29,6 +25,7 @@ type SetInitParameters struct {
 
 	// (Set of String) The list of host IDs contained in this set.
 	// The list of host IDs contained in this set.
+	// +listType=set
 	HostIds []*string `json:"hostIds,omitempty" tf:"host_ids,omitempty"`
 
 	// (String) The host set name. Defaults to the resource name.
@@ -52,6 +49,7 @@ type SetObservation struct {
 
 	// (Set of String) The list of host IDs contained in this set.
 	// The list of host IDs contained in this set.
+	// +listType=set
 	HostIds []*string `json:"hostIds,omitempty" tf:"host_ids,omitempty"`
 
 	// (String) The ID of the host set.
@@ -81,6 +79,7 @@ type SetParameters struct {
 	// (Set of String) The list of host IDs contained in this set.
 	// The list of host IDs contained in this set.
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	HostIds []*string `json:"hostIds,omitempty" tf:"host_ids,omitempty"`
 
 	// (String) The host set name. Defaults to the resource name.
@@ -118,13 +117,14 @@ type SetStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:storageversion
 
 // Set is the Schema for the Sets API. Deprecated: use boundary_host_set_static instead.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,boundary}
 type Set struct {
 	metav1.TypeMeta   `json:",inline"`

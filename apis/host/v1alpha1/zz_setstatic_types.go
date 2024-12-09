@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2023 The Crossplane Authors <https://crossplane.io>
-//
-// SPDX-License-Identifier: Apache-2.0
-
 // SPDX-FileCopyrightText: 2024 The Crossplane Authors <https://crossplane.io>
 //
 // SPDX-License-Identifier: Apache-2.0
@@ -22,6 +18,35 @@ type SetStaticInitParameters struct {
 	// (String) The host set description.
 	// The host set description.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
+
+	// (String) The catalog for the host set.
+	// The catalog for the host set.
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/host/v1alpha1.CatalogStatic
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
+	HostCatalogID *string `json:"hostCatalogId,omitempty" tf:"host_catalog_id,omitempty"`
+
+	// Reference to a CatalogStatic in host to populate hostCatalogId.
+	// +kubebuilder:validation:Optional
+	HostCatalogIDRef *v1.Reference `json:"hostCatalogIdRef,omitempty" tf:"-"`
+
+	// Selector for a CatalogStatic in host to populate hostCatalogId.
+	// +kubebuilder:validation:Optional
+	HostCatalogIDSelector *v1.Selector `json:"hostCatalogIdSelector,omitempty" tf:"-"`
+
+	// (Set of String) The list of host IDs contained in this set.
+	// The list of host IDs contained in this set.
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/host/v1alpha1.Static
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
+	// +listType=set
+	HostIds []*string `json:"hostIds,omitempty" tf:"host_ids,omitempty"`
+
+	// References to Static in host to populate hostIds.
+	// +kubebuilder:validation:Optional
+	HostIdsRefs []v1.Reference `json:"hostIdsRefs,omitempty" tf:"-"`
+
+	// Selector for a list of Static in host to populate hostIds.
+	// +kubebuilder:validation:Optional
+	HostIdsSelector *v1.Selector `json:"hostIdsSelector,omitempty" tf:"-"`
 
 	// (String) The host set name. Defaults to the resource name.
 	// The host set name. Defaults to the resource name.
@@ -44,6 +69,7 @@ type SetStaticObservation struct {
 
 	// (Set of String) The list of host IDs contained in this set.
 	// The list of host IDs contained in this set.
+	// +listType=set
 	HostIds []*string `json:"hostIds,omitempty" tf:"host_ids,omitempty"`
 
 	// (String) The ID of the host set.
@@ -85,6 +111,7 @@ type SetStaticParameters struct {
 	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/host/v1alpha1.Static
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	HostIds []*string `json:"hostIds,omitempty" tf:"host_ids,omitempty"`
 
 	// References to Static in host to populate hostIds.
@@ -130,13 +157,14 @@ type SetStaticStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:storageversion
 
 // SetStatic is the Schema for the SetStatics API. The hostsetstatic resource allows you to configure a Boundary host set. Host sets are always part of a host catalog, so a host catalog resource should be used inline or you should have the host catalog ID in hand to successfully configure a host set.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,boundary}
 type SetStatic struct {
 	metav1.TypeMeta   `json:",inline"`

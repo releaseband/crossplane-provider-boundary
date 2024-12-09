@@ -56,6 +56,38 @@ func (mg *Role) ResolveReferences(ctx context.Context, c client.Reader) error {
 	mg.Spec.ForProvider.ScopeID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.ScopeIDRef = rsp.ResolvedReference
 
+	mrsp, err = r.ResolveMultiple(ctx, reference.MultiResolutionRequest{
+		CurrentValues: reference.FromPtrValues(mg.Spec.InitProvider.PrincipalIds),
+		Extract:       resource.ExtractParamPath("id", true),
+		References:    mg.Spec.InitProvider.PrincipalIdsRefs,
+		Selector:      mg.Spec.InitProvider.PrincipalIdsSelector,
+		To: reference.To{
+			List:    &v1alpha1.GroupList{},
+			Managed: &v1alpha1.Group{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.PrincipalIds")
+	}
+	mg.Spec.InitProvider.PrincipalIds = reference.ToPtrValues(mrsp.ResolvedValues)
+	mg.Spec.InitProvider.PrincipalIdsRefs = mrsp.ResolvedReferences
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ScopeID),
+		Extract:      resource.ExtractParamPath("id", true),
+		Reference:    mg.Spec.InitProvider.ScopeIDRef,
+		Selector:     mg.Spec.InitProvider.ScopeIDSelector,
+		To: reference.To{
+			List:    &v1alpha11.ScopeList{},
+			Managed: &v1alpha11.Scope{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.ScopeID")
+	}
+	mg.Spec.InitProvider.ScopeID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.ScopeIDRef = rsp.ResolvedReference
+
 	return nil
 }
 
@@ -81,6 +113,22 @@ func (mg *Target) ResolveReferences(ctx context.Context, c client.Reader) error 
 	}
 	mg.Spec.ForProvider.ScopeID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.ScopeIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ScopeID),
+		Extract:      resource.ExtractParamPath("id", true),
+		Reference:    mg.Spec.InitProvider.ScopeIDRef,
+		Selector:     mg.Spec.InitProvider.ScopeIDSelector,
+		To: reference.To{
+			List:    &v1alpha11.ScopeList{},
+			Managed: &v1alpha11.Scope{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.ScopeID")
+	}
+	mg.Spec.InitProvider.ScopeID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.ScopeIDRef = rsp.ResolvedReference
 
 	return nil
 }

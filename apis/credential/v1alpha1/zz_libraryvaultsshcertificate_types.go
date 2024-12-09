@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2023 The Crossplane Authors <https://crossplane.io>
-//
-// SPDX-License-Identifier: Apache-2.0
-
 // SPDX-FileCopyrightText: 2024 The Crossplane Authors <https://crossplane.io>
 //
 // SPDX-License-Identifier: Apache-2.0
@@ -29,6 +25,7 @@ type LibraryVaultSSHCertificateInitParameters struct {
 
 	// (Map of String) Specifies a map of the critical options that the certificate should be signed for.
 	// Specifies a map of the critical options that the certificate should be signed for.
+	// +mapType=granular
 	CriticalOptions map[string]*string `json:"criticalOptions,omitempty" tf:"critical_options,omitempty"`
 
 	// (String) The Vault credential library description.
@@ -37,6 +34,7 @@ type LibraryVaultSSHCertificateInitParameters struct {
 
 	// (Map of String) Specifies a map of the extensions that the certificate should be signed for.
 	// Specifies a map of the extensions that the certificate should be signed for.
+	// +mapType=granular
 	Extensions map[string]*string `json:"extensions,omitempty" tf:"extensions,omitempty"`
 
 	// (Number) Specifies the number of bits to use for the generated keys.
@@ -80,6 +78,7 @@ type LibraryVaultSSHCertificateObservation struct {
 
 	// (Map of String) Specifies a map of the critical options that the certificate should be signed for.
 	// Specifies a map of the critical options that the certificate should be signed for.
+	// +mapType=granular
 	CriticalOptions map[string]*string `json:"criticalOptions,omitempty" tf:"critical_options,omitempty"`
 
 	// (String) The Vault credential library description.
@@ -88,6 +87,7 @@ type LibraryVaultSSHCertificateObservation struct {
 
 	// (Map of String) Specifies a map of the extensions that the certificate should be signed for.
 	// Specifies a map of the extensions that the certificate should be signed for.
+	// +mapType=granular
 	Extensions map[string]*string `json:"extensions,omitempty" tf:"extensions,omitempty"`
 
 	// (String) The ID of the Vault credential library.
@@ -137,6 +137,7 @@ type LibraryVaultSSHCertificateParameters struct {
 	// (Map of String) Specifies a map of the critical options that the certificate should be signed for.
 	// Specifies a map of the critical options that the certificate should be signed for.
 	// +kubebuilder:validation:Optional
+	// +mapType=granular
 	CriticalOptions map[string]*string `json:"criticalOptions,omitempty" tf:"critical_options,omitempty"`
 
 	// (String) The Vault credential library description.
@@ -147,6 +148,7 @@ type LibraryVaultSSHCertificateParameters struct {
 	// (Map of String) Specifies a map of the extensions that the certificate should be signed for.
 	// Specifies a map of the extensions that the certificate should be signed for.
 	// +kubebuilder:validation:Optional
+	// +mapType=granular
 	Extensions map[string]*string `json:"extensions,omitempty" tf:"extensions,omitempty"`
 
 	// (Number) Specifies the number of bits to use for the generated keys.
@@ -209,13 +211,14 @@ type LibraryVaultSSHCertificateStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:storageversion
 
 // LibraryVaultSSHCertificate is the Schema for the LibraryVaultSSHCertificates API. The credential library for Vault resource allows you to configure a Boundary credential library for Vault.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,boundary}
 type LibraryVaultSSHCertificate struct {
 	metav1.TypeMeta   `json:",inline"`

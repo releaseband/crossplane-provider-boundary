@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2023 The Crossplane Authors <https://crossplane.io>
-//
-// SPDX-License-Identifier: Apache-2.0
-
 // SPDX-FileCopyrightText: 2024 The Crossplane Authors <https://crossplane.io>
 //
 // SPDX-License-Identifier: Apache-2.0
@@ -47,6 +43,10 @@ type MethodOidcInitParameters struct {
 	// The HMAC of the client secret returned by the Boundary controller, which is used for comparison after initial setting of the value.
 	ClientSecretHMAC *string `json:"clientSecretHmac,omitempty" tf:"client_secret_hmac,omitempty"`
 
+	// (String, Sensitive) The secret key assigned to this auth method from the provider. Once set, only the hash will be kept and the original value can be removed from configuration.
+	// The secret key assigned to this auth method from the provider. Once set, only the hash will be kept and the original value can be removed from configuration.
+	ClientSecretSecretRef *v1.SecretKeySelector `json:"clientSecretSecretRef,omitempty" tf:"-"`
+
 	// (String) The auth method description.
 	// The auth method description.
 	Description *string `json:"description,omitempty" tf:"description,omitempty"`
@@ -78,6 +78,20 @@ type MethodOidcInitParameters struct {
 	// user for reauthentication, account selection or consent. Please note the values passed are case-sensitive. The valid values are: none, login, consent and select_account.
 	// The prompts passed to the identity provider to determine whether to prompt the end-user for reauthentication, account selection or consent. Please note the values passed are case-sensitive. The valid values are: `none`, `login`, `consent` and `select_account`.
 	Prompts []*string `json:"prompts,omitempty" tf:"prompts,omitempty"`
+
+	// (String) The scope ID.
+	// The scope ID.
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/main/v1alpha1.Scope
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
+	ScopeID *string `json:"scopeId,omitempty" tf:"scope_id,omitempty"`
+
+	// Reference to a Scope in main to populate scopeId.
+	// +kubebuilder:validation:Optional
+	ScopeIDRef *v1.Reference `json:"scopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a Scope in main to populate scopeId.
+	// +kubebuilder:validation:Optional
+	ScopeIDSelector *v1.Selector `json:"scopeIdSelector,omitempty" tf:"-"`
 
 	// (List of String) Allowed signing algorithms for the provider's issued tokens.
 	// Allowed signing algorithms for the provider's issued tokens.
@@ -311,13 +325,14 @@ type MethodOidcStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:storageversion
 
 // MethodOidc is the Schema for the MethodOidcs API. The OIDC auth method resource allows you to configure a Boundary authmethodoidc.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,boundary}
 type MethodOidc struct {
 	metav1.TypeMeta   `json:",inline"`

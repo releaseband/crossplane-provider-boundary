@@ -38,5 +38,21 @@ func (mg *Group) ResolveReferences(ctx context.Context, c client.Reader) error {
 	mg.Spec.ForProvider.AuthMethodID = reference.ToPtrValue(rsp.ResolvedValue)
 	mg.Spec.ForProvider.AuthMethodIDRef = rsp.ResolvedReference
 
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.AuthMethodID),
+		Extract:      resource.ExtractParamPath("id", true),
+		Reference:    mg.Spec.InitProvider.AuthMethodIDRef,
+		Selector:     mg.Spec.InitProvider.AuthMethodIDSelector,
+		To: reference.To{
+			List:    &v1alpha1.MethodOidcList{},
+			Managed: &v1alpha1.MethodOidc{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.AuthMethodID")
+	}
+	mg.Spec.InitProvider.AuthMethodID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.AuthMethodIDRef = rsp.ResolvedReference
+
 	return nil
 }

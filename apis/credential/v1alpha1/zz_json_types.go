@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2023 The Crossplane Authors <https://crossplane.io>
-//
-// SPDX-License-Identifier: Apache-2.0
-
 // SPDX-FileCopyrightText: 2024 The Crossplane Authors <https://crossplane.io>
 //
 // SPDX-License-Identifier: Apache-2.0
@@ -30,6 +26,10 @@ type JSONInitParameters struct {
 	// (String) The name of this json credential. Defaults to the resource name.
 	// The name of this json credential. Defaults to the resource name.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	// escaped JSON string, or a file
+	// The object for the this json credential. Either values encoded with the "jsonencode" function, pre-escaped JSON string, or a file
+	ObjectSecretRef v1.SecretKeySelector `json:"objectSecretRef" tf:"-"`
 }
 
 type JSONObservation struct {
@@ -101,13 +101,14 @@ type JSONStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:storageversion
 
 // JSON is the Schema for the JSONs API. The json credential resource allows you to congiure a credential using a json object.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,boundary}
 type JSON struct {
 	metav1.TypeMeta   `json:",inline"`

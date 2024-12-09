@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: 2023 The Crossplane Authors <https://crossplane.io>
-//
-// SPDX-License-Identifier: Apache-2.0
-
 // SPDX-FileCopyrightText: 2024 The Crossplane Authors <https://crossplane.io>
 //
 // SPDX-License-Identifier: Apache-2.0
@@ -25,6 +21,7 @@ type GroupInitParameters struct {
 
 	// (Set of String) Resource IDs for group members, these are most likely boundary users.
 	// Resource IDs for group members, these are most likely boundary users.
+	// +listType=set
 	MemberIds []*string `json:"memberIds,omitempty" tf:"member_ids,omitempty"`
 
 	// (String) The group name. Defaults to the resource name.
@@ -47,6 +44,7 @@ type GroupObservation struct {
 
 	// (Set of String) Resource IDs for group members, these are most likely boundary users.
 	// Resource IDs for group members, these are most likely boundary users.
+	// +listType=set
 	MemberIds []*string `json:"memberIds,omitempty" tf:"member_ids,omitempty"`
 
 	// (String) The group name. Defaults to the resource name.
@@ -68,6 +66,7 @@ type GroupParameters struct {
 	// (Set of String) Resource IDs for group members, these are most likely boundary users.
 	// Resource IDs for group members, these are most likely boundary users.
 	// +kubebuilder:validation:Optional
+	// +listType=set
 	MemberIds []*string `json:"memberIds,omitempty" tf:"member_ids,omitempty"`
 
 	// (String) The group name. Defaults to the resource name.
@@ -105,13 +104,14 @@ type GroupStatus struct {
 }
 
 // +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
+// +kubebuilder:storageversion
 
 // Group is the Schema for the Groups API. The group resource allows you to configure a Boundary group.
-// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="SYNCED",type="string",JSONPath=".status.conditions[?(@.type=='Synced')].status"
+// +kubebuilder:printcolumn:name="READY",type="string",JSONPath=".status.conditions[?(@.type=='Ready')].status"
 // +kubebuilder:printcolumn:name="EXTERNAL-NAME",type="string",JSONPath=".metadata.annotations.crossplane\\.io/external-name"
 // +kubebuilder:printcolumn:name="AGE",type="date",JSONPath=".metadata.creationTimestamp"
-// +kubebuilder:subresource:status
 // +kubebuilder:resource:scope=Cluster,categories={crossplane,managed,boundary}
 type Group struct {
 	metav1.TypeMeta   `json:",inline"`
