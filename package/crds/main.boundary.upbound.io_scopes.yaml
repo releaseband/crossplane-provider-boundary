@@ -4,9 +4,9 @@ kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.13.0
-  name: scopes.boundary.boundary.upbound.io
+  name: scopes.main.boundary.upbound.io
 spec:
-  group: boundary.boundary.upbound.io
+  group: main.boundary.upbound.io
   names:
     categories:
     - crossplane

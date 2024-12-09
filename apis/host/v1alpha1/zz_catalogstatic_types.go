@@ -26,6 +26,10 @@ type CatalogStaticInitParameters struct {
 	// (String) The host catalog name. Defaults to the resource name.
 	// The host catalog name. Defaults to the resource name.
 	Name *string `json:"name,omitempty" tf:"name,omitempty"`
+
+	// (String) The scope ID in which the resource is created.
+	// The scope ID in which the resource is created.
+	ScopeID *string `json:"scopeId,omitempty" tf:"scope_id,omitempty"`
 }
 
 type CatalogStaticObservation struct {
@@ -60,18 +64,8 @@ type CatalogStaticParameters struct {
 
 	// (String) The scope ID in which the resource is created.
 	// The scope ID in which the resource is created.
-	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/boundary/v1alpha1.Scope
-	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
 	// +kubebuilder:validation:Optional
 	ScopeID *string `json:"scopeId,omitempty" tf:"scope_id,omitempty"`
-
-	// Reference to a Scope in boundary to populate scopeId.
-	// +kubebuilder:validation:Optional
-	ScopeIDRef *v1.Reference `json:"scopeIdRef,omitempty" tf:"-"`
-
-	// Selector for a Scope in boundary to populate scopeId.
-	// +kubebuilder:validation:Optional
-	ScopeIDSelector *v1.Selector `json:"scopeIdSelector,omitempty" tf:"-"`
 }
 
 // CatalogStaticSpec defines the desired state of CatalogStatic
@@ -109,8 +103,9 @@ type CatalogStaticStatus struct {
 type CatalogStatic struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	Spec              CatalogStaticSpec   `json:"spec"`
-	Status            CatalogStaticStatus `json:"status,omitempty"`
+	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.scopeId) || (has(self.initProvider) && has(self.initProvider.scopeId))",message="spec.forProvider.scopeId is a required parameter"
+	Spec   CatalogStaticSpec   `json:"spec"`
+	Status CatalogStaticStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true

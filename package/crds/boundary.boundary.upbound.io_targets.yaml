@@ -133,7 +133,7 @@ spec:
                       `default_scope` if unset.
                     type: string
                   scopeIdRef:
-                    description: Reference to a Scope in boundary to populate scopeId.
+                    description: Reference to a Scope in main to populate scopeId.
                     properties:
                       name:
                         description: Name of the referenced object.
@@ -167,7 +167,7 @@ spec:
                     - name
                     type: object
                   scopeIdSelector:
-                    description: Selector for a Scope in boundary to populate scopeId.
+                    description: Selector for a Scope in main to populate scopeId.
                     properties:
                       matchControllerRef:
                         description: MatchControllerRef ensures an object with the

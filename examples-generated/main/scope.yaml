@@ -1,8 +1,8 @@
-apiVersion: boundary.boundary.upbound.io/v1alpha1
+apiVersion: main.boundary.upbound.io/v1alpha1
 kind: Scope
 metadata:
   annotations:
-    meta.upbound.io/example-id: boundary/v1alpha1/scope
+    meta.upbound.io/example-id: main/v1alpha1/scope
   labels:
     testing.upbound.io/example-name: global
   name: global

@@ -20,6 +20,7 @@ import (
 	v1alpha1boundary "github.com/releaseband/crossplane-provider-boundary/apis/boundary/v1alpha1"
 	v1alpha1credential "github.com/releaseband/crossplane-provider-boundary/apis/credential/v1alpha1"
 	v1alpha1host "github.com/releaseband/crossplane-provider-boundary/apis/host/v1alpha1"
+	v1alpha1main "github.com/releaseband/crossplane-provider-boundary/apis/main/v1alpha1"
 	v1alpha1managed "github.com/releaseband/crossplane-provider-boundary/apis/managed/v1alpha1"
 	v1alpha1policy "github.com/releaseband/crossplane-provider-boundary/apis/policy/v1alpha1"
 	v1alpha1scope "github.com/releaseband/crossplane-provider-boundary/apis/scope/v1alpha1"
@@ -37,6 +38,7 @@ func init() {
 		v1alpha1boundary.SchemeBuilder.AddToScheme,
 		v1alpha1credential.SchemeBuilder.AddToScheme,
 		v1alpha1host.SchemeBuilder.AddToScheme,
+		v1alpha1main.SchemeBuilder.AddToScheme,
 		v1alpha1managed.SchemeBuilder.AddToScheme,
 		v1alpha1policy.SchemeBuilder.AddToScheme,
 		v1alpha1scope.SchemeBuilder.AddToScheme,

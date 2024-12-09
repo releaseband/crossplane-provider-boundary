@@ -23,7 +23,7 @@ spec:
 
 ---
 
-apiVersion: boundary.boundary.upbound.io/v1alpha1
+apiVersion: main.boundary.upbound.io/v1alpha1
 kind: Scope
 metadata:
   annotations:

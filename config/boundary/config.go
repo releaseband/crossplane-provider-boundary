@@ -28,5 +28,4 @@ func Configure(p *config.Provider) {
 			Extractor:     `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)`,
 		}
 	})
-
 }

@@ -23,7 +23,7 @@ import (
 	"github.com/crossplane/upjet/pkg/terraform"
 	ctrl "sigs.k8s.io/controller-runtime"
 
-	v1alpha1 "github.com/releaseband/crossplane-provider-boundary/apis/boundary/v1alpha1"
+	v1alpha1 "github.com/releaseband/crossplane-provider-boundary/apis/main/v1alpha1"
 	features "github.com/releaseband/crossplane-provider-boundary/internal/features"
 )
 
