@@ -1,0 +1,101 @@
+apiVersion: host.boundary.upbound.io/v1alpha1
+kind: Set
+metadata:
+  annotations:
+    meta.upbound.io/example-id: host/v1alpha1/set
+  labels:
+    testing.upbound.io/example-name: web
+  name: web
+spec:
+  forProvider:
+    hostCatalogId: ${boundary_host_catalog.static.id}
+    hostIds:
+    - ${boundary_host.first.id}
+    - ${boundary_host.second.id}
+    type: static
+
+---
+
+apiVersion: boundary.boundary.upbound.io/v1alpha1
+kind: Host
+metadata:
+  annotations:
+    meta.upbound.io/example-id: host/v1alpha1/set
+  labels:
+    testing.upbound.io/example-name: first
+  name: first
+spec:
+  forProvider:
+    address: 10.0.0.1
+    description: My first host!
+    hostCatalogId: ${boundary_host_catalog.static.id}
+    name: host_1
+    type: static
+
+---
+
+apiVersion: boundary.boundary.upbound.io/v1alpha1
+kind: Host
+metadata:
+  annotations:
+    meta.upbound.io/example-id: host/v1alpha1/set
+  labels:
+    testing.upbound.io/example-name: second
+  name: second
+spec:
+  forProvider:
+    address: 10.0.0.2
+    description: My second host!
+    hostCatalogId: ${boundary_host_catalog.static.id}
+    name: host_2
+    type: static
+
+---
+
+apiVersion: host.boundary.upbound.io/v1alpha1
+kind: Catalog
+metadata:
+  annotations:
+    meta.upbound.io/example-id: host/v1alpha1/set
+  labels:
+    testing.upbound.io/example-name: static
+  name: static
+spec:
+  forProvider:
+    scopeId: ${boundary_scope.project.id}
+    type: static
+
+---
+
+apiVersion: main.boundary.upbound.io/v1alpha1
+kind: Scope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: host/v1alpha1/set
+  labels:
+    testing.upbound.io/example-name: org
+  name: org
+spec:
+  forProvider:
+    autoCreateAdminRole: true
+    autoCreateDefaultRole: true
+    description: My first scope!
+    name: organization_one
+    scopeId: global
+
+---
+
+apiVersion: main.boundary.upbound.io/v1alpha1
+kind: Scope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: host/v1alpha1/set
+  labels:
+    testing.upbound.io/example-name: project
+  name: project
+spec:
+  forProvider:
+    autoCreateAdminRole: true
+    description: My first scope!
+    name: project_one
+    scopeId: ${boundary_scope.org.id}

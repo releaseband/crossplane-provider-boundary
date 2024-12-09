@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2023 The Crossplane Authors <https://crossplane.io>
+// SPDX-FileCopyrightText: 2024 The Crossplane Authors <https://crossplane.io>
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -21,7 +21,6 @@ import (
 	group "github.com/releaseband/crossplane-provider-boundary/internal/controller/boundary/group"
 	host "github.com/releaseband/crossplane-provider-boundary/internal/controller/boundary/host"
 	role "github.com/releaseband/crossplane-provider-boundary/internal/controller/boundary/role"
-	scope "github.com/releaseband/crossplane-provider-boundary/internal/controller/boundary/scope"
 	targetboundary "github.com/releaseband/crossplane-provider-boundary/internal/controller/boundary/target"
 	user "github.com/releaseband/crossplane-provider-boundary/internal/controller/boundary/user"
 	worker "github.com/releaseband/crossplane-provider-boundary/internal/controller/boundary/worker"
@@ -39,6 +38,7 @@ import (
 	setplugin "github.com/releaseband/crossplane-provider-boundary/internal/controller/host/setplugin"
 	setstatic "github.com/releaseband/crossplane-provider-boundary/internal/controller/host/setstatic"
 	static "github.com/releaseband/crossplane-provider-boundary/internal/controller/host/static"
+	scope "github.com/releaseband/crossplane-provider-boundary/internal/controller/main/scope"
 	groupmanaged "github.com/releaseband/crossplane-provider-boundary/internal/controller/managed/group"
 	groupldap "github.com/releaseband/crossplane-provider-boundary/internal/controller/managed/groupldap"
 	storage "github.com/releaseband/crossplane-provider-boundary/internal/controller/policy/storage"
@@ -63,7 +63,6 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		group.Setup,
 		host.Setup,
 		role.Setup,
-		scope.Setup,
 		targetboundary.Setup,
 		user.Setup,
 		worker.Setup,
@@ -81,6 +80,7 @@ func Setup(mgr ctrl.Manager, o controller.Options) error {
 		setplugin.Setup,
 		setstatic.Setup,
 		static.Setup,
+		scope.Setup,
 		groupmanaged.Setup,
 		groupldap.Setup,
 		storage.Setup,

@@ -1,0 +1,40 @@
+apiVersion: auth.boundary.upbound.io/v1alpha1
+kind: MethodLdap
+metadata:
+  annotations:
+    meta.upbound.io/example-id: auth/v1alpha1/methodldap
+  labels:
+    testing.upbound.io/example-name: forumsys_ldap
+  name: forumsys-ldap
+spec:
+  forProvider:
+    bindDn: cn=read-only-admin,dc=example,dc=com
+    bindPassword: password
+    discoverDn: true
+    enableGroups: true
+    groupDn: dc=example,dc=com
+    name: forumsys public LDAP
+    scopeId: global
+    state: active-public
+    urls:
+    - ldap://ldap.forumsys.com
+    userAttr: uid
+    userDn: dc=example,dc=com
+
+---
+
+apiVersion: main.boundary.upbound.io/v1alpha1
+kind: Scope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: auth/v1alpha1/methodldap
+  labels:
+    testing.upbound.io/example-name: org
+  name: org
+spec:
+  forProvider:
+    autoCreateAdminRole: true
+    autoCreateDefaultRole: true
+    description: My first scope!
+    name: organization_one
+    scopeId: global

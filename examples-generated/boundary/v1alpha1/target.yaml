@@ -1,0 +1,205 @@
+apiVersion: boundary.boundary.upbound.io/v1alpha1
+kind: Target
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/target
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    brokeredCredentialSourceIds:
+    - ${boundary_credential_library_vault.foo.id}
+    defaultPort: "22"
+    description: Foo target
+    hostSourceIds:
+    - ${boundary_host_set.foo.id}
+    name: foo
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: project
+    type: tcp
+
+---
+
+apiVersion: credential.boundary.upbound.io/v1alpha1
+kind: LibraryVault
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/target
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    credentialStoreId: ${boundary_credential_store_vault.foo.id}
+    credentialType: username_password
+    description: My first Vault credential library!
+    httpMethod: GET
+    name: foo
+    path: my/secret/foo
+
+---
+
+apiVersion: credential.boundary.upbound.io/v1alpha1
+kind: StoreVault
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/target
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    address: http://127.0.0.1:8200
+    description: My first Vault credential store!
+    name: vault_store
+    scopeId: ${boundary_scope.project.id}
+    tokenSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+
+---
+
+apiVersion: boundary.boundary.upbound.io/v1alpha1
+kind: Host
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/target
+  labels:
+    testing.upbound.io/example-name: bar
+  name: bar
+spec:
+  forProvider:
+    address: 10.0.0.1
+    hostCatalogId: ${boundary_host_catalog.foo.id}
+    name: bar
+    type: static
+
+---
+
+apiVersion: boundary.boundary.upbound.io/v1alpha1
+kind: Host
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/target
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    address: 10.0.0.1
+    hostCatalogId: ${boundary_host_catalog.foo.id}
+    name: foo
+    type: static
+
+---
+
+apiVersion: host.boundary.upbound.io/v1alpha1
+kind: Catalog
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/target
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    description: test catalog
+    name: test
+    scopeId: ${boundary_scope.project.id}
+    type: static
+
+---
+
+apiVersion: host.boundary.upbound.io/v1alpha1
+kind: Set
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/target
+  labels:
+    testing.upbound.io/example-name: foo
+  name: foo
+spec:
+  forProvider:
+    hostCatalogId: ${boundary_host_catalog.foo.id}
+    hostIds:
+    - ${boundary_host.foo.id}
+    - ${boundary_host.bar.id}
+    name: foo
+    type: static
+
+---
+
+apiVersion: main.boundary.upbound.io/v1alpha1
+kind: Scope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/target
+  labels:
+    testing.upbound.io/example-name: global
+  name: global
+spec:
+  forProvider:
+    globalScope: true
+    scopeId: global
+
+---
+
+apiVersion: main.boundary.upbound.io/v1alpha1
+kind: Scope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/target
+  labels:
+    testing.upbound.io/example-name: org
+  name: org
+spec:
+  forProvider:
+    autoCreateAdminRole: true
+    autoCreateDefaultRole: true
+    description: My first scope!
+    name: organization_one
+    scopeId: ${boundary_scope.global.id}
+
+---
+
+apiVersion: main.boundary.upbound.io/v1alpha1
+kind: Scope
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/target
+  labels:
+    testing.upbound.io/example-name: project
+  name: project
+spec:
+  forProvider:
+    autoCreateAdminRole: true
+    description: My first scope!
+    name: project_one
+    scopeId: ${boundary_scope.org.id}
+
+---
+
+apiVersion: storage.boundary.upbound.io/v1alpha1
+kind: Bucket
+metadata:
+  annotations:
+    meta.upbound.io/example-id: boundary/v1alpha1/target
+  labels:
+    testing.upbound.io/example-name: aws_example
+  name: aws-example
+spec:
+  forProvider:
+    attributesJson: ${jsonencode({ "region" = "us-east-1" })}
+    bucketName: mybucket
+    description: My first storage bucket!
+    name: My aws storage bucket
+    pluginName: aws
+    scopeId: ${boundary_scope.org.id}
+    secretsJsonSecretRef:
+      key: example-key
+      name: example-secret
+      namespace: upbound-system
+    workerFilter: '"pki" in "/tags/type"'
