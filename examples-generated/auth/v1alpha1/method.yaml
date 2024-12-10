@@ -27,4 +27,6 @@ spec:
     autoCreateDefaultRole: true
     description: My first scope!
     name: organization_one
-    scopeId: global
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example

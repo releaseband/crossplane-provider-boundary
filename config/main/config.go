@@ -10,5 +10,9 @@ import "github.com/crossplane/upjet/pkg/config"
 func Configure(p *config.Provider) {
 	p.AddResourceConfigurator("boundary_scope", func(r *config.Resource) {
 		r.ShortGroup = "main"
+		r.References["scope_id"] = config.Reference{
+			TerraformName: "boundary_scope",
+			Extractor:     `github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)`,
+		}
 	})
 }

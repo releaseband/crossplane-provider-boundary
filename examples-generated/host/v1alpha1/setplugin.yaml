@@ -78,7 +78,9 @@ spec:
     autoCreateDefaultRole: true
     description: My first scope!
     name: organization_one
-    scopeId: global
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
 
 ---
 
@@ -95,4 +97,6 @@ spec:
     autoCreateAdminRole: true
     description: My first scope!
     name: project_one
-    scopeId: ${boundary_scope.org.id}
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: org
