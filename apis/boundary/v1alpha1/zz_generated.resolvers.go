@@ -15,6 +15,48 @@ import (
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
+// ResolveReferences of this Group.
+func (mg *Group) ResolveReferences(ctx context.Context, c client.Reader) error {
+	r := reference.NewAPIResolver(c, mg)
+
+	var rsp reference.ResolutionResponse
+	var err error
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.ForProvider.ScopeID),
+		Extract:      resource.ExtractParamPath("id", true),
+		Reference:    mg.Spec.ForProvider.ScopeIDRef,
+		Selector:     mg.Spec.ForProvider.ScopeIDSelector,
+		To: reference.To{
+			List:    &v1alpha1.ScopeList{},
+			Managed: &v1alpha1.Scope{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.ForProvider.ScopeID")
+	}
+	mg.Spec.ForProvider.ScopeID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.ForProvider.ScopeIDRef = rsp.ResolvedReference
+
+	rsp, err = r.Resolve(ctx, reference.ResolutionRequest{
+		CurrentValue: reference.FromPtrValue(mg.Spec.InitProvider.ScopeID),
+		Extract:      resource.ExtractParamPath("id", true),
+		Reference:    mg.Spec.InitProvider.ScopeIDRef,
+		Selector:     mg.Spec.InitProvider.ScopeIDSelector,
+		To: reference.To{
+			List:    &v1alpha1.ScopeList{},
+			Managed: &v1alpha1.Scope{},
+		},
+	})
+	if err != nil {
+		return errors.Wrap(err, "mg.Spec.InitProvider.ScopeID")
+	}
+	mg.Spec.InitProvider.ScopeID = reference.ToPtrValue(rsp.ResolvedValue)
+	mg.Spec.InitProvider.ScopeIDRef = rsp.ResolvedReference
+
+	return nil
+}
+
 // ResolveReferences of this Role.
 func (mg *Role) ResolveReferences(ctx context.Context, c client.Reader) error {
 	r := reference.NewAPIResolver(c, mg)

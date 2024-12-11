@@ -12,7 +12,9 @@ spec:
     memberIds:
     - ${boundary_user.foo.id}
     name: My group
-    scopeId: ${boundary_scope.org.id}
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: org
 
 ---
 
