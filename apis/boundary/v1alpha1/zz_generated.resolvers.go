@@ -11,8 +11,7 @@ import (
 	reference "github.com/crossplane/crossplane-runtime/pkg/reference"
 	resource "github.com/crossplane/upjet/pkg/resource"
 	errors "github.com/pkg/errors"
-	v1alpha11 "github.com/releaseband/crossplane-provider-boundary/apis/main/v1alpha1"
-	v1alpha1 "github.com/releaseband/crossplane-provider-boundary/apis/managed/v1alpha1"
+	v1alpha1 "github.com/releaseband/crossplane-provider-boundary/apis/main/v1alpha1"
 	client "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -30,8 +29,8 @@ func (mg *Role) ResolveReferences(ctx context.Context, c client.Reader) error {
 		References:    mg.Spec.ForProvider.PrincipalIdsRefs,
 		Selector:      mg.Spec.ForProvider.PrincipalIdsSelector,
 		To: reference.To{
-			List:    &v1alpha1.GroupList{},
-			Managed: &v1alpha1.Group{},
+			List:    &GroupList{},
+			Managed: &Group{},
 		},
 	})
 	if err != nil {
@@ -46,8 +45,8 @@ func (mg *Role) ResolveReferences(ctx context.Context, c client.Reader) error {
 		Reference:    mg.Spec.ForProvider.ScopeIDRef,
 		Selector:     mg.Spec.ForProvider.ScopeIDSelector,
 		To: reference.To{
-			List:    &v1alpha11.ScopeList{},
-			Managed: &v1alpha11.Scope{},
+			List:    &v1alpha1.ScopeList{},
+			Managed: &v1alpha1.Scope{},
 		},
 	})
 	if err != nil {
@@ -62,8 +61,8 @@ func (mg *Role) ResolveReferences(ctx context.Context, c client.Reader) error {
 		References:    mg.Spec.InitProvider.PrincipalIdsRefs,
 		Selector:      mg.Spec.InitProvider.PrincipalIdsSelector,
 		To: reference.To{
-			List:    &v1alpha1.GroupList{},
-			Managed: &v1alpha1.Group{},
+			List:    &GroupList{},
+			Managed: &Group{},
 		},
 	})
 	if err != nil {
@@ -78,8 +77,8 @@ func (mg *Role) ResolveReferences(ctx context.Context, c client.Reader) error {
 		Reference:    mg.Spec.InitProvider.ScopeIDRef,
 		Selector:     mg.Spec.InitProvider.ScopeIDSelector,
 		To: reference.To{
-			List:    &v1alpha11.ScopeList{},
-			Managed: &v1alpha11.Scope{},
+			List:    &v1alpha1.ScopeList{},
+			Managed: &v1alpha1.Scope{},
 		},
 	})
 	if err != nil {
@@ -104,8 +103,8 @@ func (mg *Target) ResolveReferences(ctx context.Context, c client.Reader) error 
 		Reference:    mg.Spec.ForProvider.ScopeIDRef,
 		Selector:     mg.Spec.ForProvider.ScopeIDSelector,
 		To: reference.To{
-			List:    &v1alpha11.ScopeList{},
-			Managed: &v1alpha11.Scope{},
+			List:    &v1alpha1.ScopeList{},
+			Managed: &v1alpha1.Scope{},
 		},
 	})
 	if err != nil {
@@ -120,8 +119,8 @@ func (mg *Target) ResolveReferences(ctx context.Context, c client.Reader) error 
 		Reference:    mg.Spec.InitProvider.ScopeIDRef,
 		Selector:     mg.Spec.InitProvider.ScopeIDSelector,
 		To: reference.To{
-			List:    &v1alpha11.ScopeList{},
-			Managed: &v1alpha11.Scope{},
+			List:    &v1alpha1.ScopeList{},
+			Managed: &v1alpha1.Scope{},
 		},
 	})
 	if err != nil {

@@ -113,7 +113,7 @@ spec:
                     type: array
                     x-kubernetes-list-type: set
                   principalIdsRefs:
-                    description: References to Group in managed to populate principalIds.
+                    description: References to Group in boundary to populate principalIds.
                     items:
                       description: A Reference to a named object.
                       properties:
@@ -150,7 +150,7 @@ spec:
                       type: object
                     type: array
                   principalIdsSelector:
-                    description: Selector for a list of Group in managed to populate
+                    description: Selector for a list of Group in boundary to populate
                       principalIds.
                     properties:
                       matchControllerRef:
@@ -323,7 +323,7 @@ spec:
                     type: array
                     x-kubernetes-list-type: set
                   principalIdsRefs:
-                    description: References to Group in managed to populate principalIds.
+                    description: References to Group in boundary to populate principalIds.
                     items:
                       description: A Reference to a named object.
                       properties:
@@ -360,7 +360,7 @@ spec:
                       type: object
                     type: array
                   principalIdsSelector:
-                    description: Selector for a list of Group in managed to populate
+                    description: Selector for a list of Group in boundary to populate
                       principalIds.
                     properties:
                       matchControllerRef:

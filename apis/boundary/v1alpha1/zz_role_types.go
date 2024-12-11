@@ -39,16 +39,16 @@ type RoleInitParameters struct {
 
 	// (Set of String) A list of principal (user or group) IDs to add as principals on the role.
 	// A list of principal (user or group) IDs to add as principals on the role.
-	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/managed/v1alpha1.Group
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/boundary/v1alpha1.Group
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
 	// +listType=set
 	PrincipalIds []*string `json:"principalIds,omitempty" tf:"principal_ids,omitempty"`
 
-	// References to Group in managed to populate principalIds.
+	// References to Group in boundary to populate principalIds.
 	// +kubebuilder:validation:Optional
 	PrincipalIdsRefs []v1.Reference `json:"principalIdsRefs,omitempty" tf:"-"`
 
-	// Selector for a list of Group in managed to populate principalIds.
+	// Selector for a list of Group in boundary to populate principalIds.
 	// +kubebuilder:validation:Optional
 	PrincipalIdsSelector *v1.Selector `json:"principalIdsSelector,omitempty" tf:"-"`
 
@@ -135,17 +135,17 @@ type RoleParameters struct {
 
 	// (Set of String) A list of principal (user or group) IDs to add as principals on the role.
 	// A list of principal (user or group) IDs to add as principals on the role.
-	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/managed/v1alpha1.Group
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/boundary/v1alpha1.Group
 	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
 	// +kubebuilder:validation:Optional
 	// +listType=set
 	PrincipalIds []*string `json:"principalIds,omitempty" tf:"principal_ids,omitempty"`
 
-	// References to Group in managed to populate principalIds.
+	// References to Group in boundary to populate principalIds.
 	// +kubebuilder:validation:Optional
 	PrincipalIdsRefs []v1.Reference `json:"principalIdsRefs,omitempty" tf:"-"`
 
-	// Selector for a list of Group in managed to populate principalIds.
+	// Selector for a list of Group in boundary to populate principalIds.
 	// +kubebuilder:validation:Optional
 	PrincipalIdsSelector *v1.Selector `json:"principalIdsSelector,omitempty" tf:"-"`
 
