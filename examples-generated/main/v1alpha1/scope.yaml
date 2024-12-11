@@ -9,4 +9,6 @@ metadata:
 spec:
   forProvider:
     globalScope: true
-    scopeId: global
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example

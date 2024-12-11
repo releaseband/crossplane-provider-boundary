@@ -143,7 +143,9 @@ metadata:
 spec:
   forProvider:
     globalScope: true
-    scopeId: global
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: example
 
 ---
 
@@ -161,7 +163,9 @@ spec:
     autoCreateDefaultRole: true
     description: My first scope!
     name: organization_one
-    scopeId: ${boundary_scope.global.id}
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: global
 
 ---
 
@@ -178,7 +182,9 @@ spec:
     autoCreateAdminRole: true
     description: My first scope!
     name: project_one
-    scopeId: ${boundary_scope.org.id}
+    scopeIdSelector:
+      matchLabels:
+        testing.upbound.io/example-name: org
 
 ---
 

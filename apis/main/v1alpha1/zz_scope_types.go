@@ -37,7 +37,17 @@ type ScopeInitParameters struct {
 
 	// (String) The scope ID containing the sub scope resource.
 	// The scope ID containing the sub scope resource.
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/main/v1alpha1.Scope
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
 	ScopeID *string `json:"scopeId,omitempty" tf:"scope_id,omitempty"`
+
+	// Reference to a Scope in main to populate scopeId.
+	// +kubebuilder:validation:Optional
+	ScopeIDRef *v1.Reference `json:"scopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a Scope in main to populate scopeId.
+	// +kubebuilder:validation:Optional
+	ScopeIDSelector *v1.Selector `json:"scopeIdSelector,omitempty" tf:"-"`
 }
 
 type ScopeObservation struct {
@@ -99,8 +109,18 @@ type ScopeParameters struct {
 
 	// (String) The scope ID containing the sub scope resource.
 	// The scope ID containing the sub scope resource.
+	// +crossplane:generate:reference:type=github.com/releaseband/crossplane-provider-boundary/apis/main/v1alpha1.Scope
+	// +crossplane:generate:reference:extractor=github.com/crossplane/upjet/pkg/resource.ExtractParamPath("id",true)
 	// +kubebuilder:validation:Optional
 	ScopeID *string `json:"scopeId,omitempty" tf:"scope_id,omitempty"`
+
+	// Reference to a Scope in main to populate scopeId.
+	// +kubebuilder:validation:Optional
+	ScopeIDRef *v1.Reference `json:"scopeIdRef,omitempty" tf:"-"`
+
+	// Selector for a Scope in main to populate scopeId.
+	// +kubebuilder:validation:Optional
+	ScopeIDSelector *v1.Selector `json:"scopeIdSelector,omitempty" tf:"-"`
 }
 
 // ScopeSpec defines the desired state of Scope
@@ -139,9 +159,8 @@ type ScopeStatus struct {
 type Scope struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-	// +kubebuilder:validation:XValidation:rule="!('*' in self.managementPolicies || 'Create' in self.managementPolicies || 'Update' in self.managementPolicies) || has(self.forProvider.scopeId) || (has(self.initProvider) && has(self.initProvider.scopeId))",message="spec.forProvider.scopeId is a required parameter"
-	Spec   ScopeSpec   `json:"spec"`
-	Status ScopeStatus `json:"status,omitempty"`
+	Spec              ScopeSpec   `json:"spec"`
+	Status            ScopeStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
